@@ -1,9 +1,9 @@
 import './App.css'
 import {useRoutes} from 'react-router-dom';
-import Routes from './services/Routes';
+import getRoutes from './services/Routes';
 
 function App() {
-    const routing = useRoutes(Routes());
+    const routing = useRoutes(getRoutes());
     return (
         <>
             {routing}

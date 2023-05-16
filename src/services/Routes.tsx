@@ -1,12 +1,12 @@
 import {Navigate} from 'react-router-dom';
-import Accueil from '../components/accueil/Accueil';
+import Accueil from '../components/Accueil/Accueil';
 
-const Routes = () => [
+const getRoutes = () => [
     {
         path: '/',
-        element: <Accueil/>l
+        element: <Accueil/>
     }
 ]
 
 
-export default Routes
+export default getRoutes
