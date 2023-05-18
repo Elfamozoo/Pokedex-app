@@ -1,78 +1,55 @@
 import {
     Card,
     Image,
-    ActionIcon,
     Group,
     Text,
     Avatar,
     Badge,
 } from '@mantine/core';
-import {IconHeart, IconBookmark, IconShare} from "@tabler/icons-react";
 import useStyles from "./PokemonCard.styles.ts";
+import {usePokemonInfos} from "../../services/usePokemonInfos.ts";
 
-
-interface ArticleCardFooterProps {
-    image: string;
-    category: string;
-    title: string;
-    footer: string;
-    author: {
-        name: string;
-        description: string;
-        image: string;
-    };
+interface PokemonCardProps {
+    pokemonName: string;
 }
 
-const PokemonCard = (props: ArticleCardFooterProps) => {
+const PokemonCard = ({pokemonName}: PokemonCardProps) => {
+    const {classes} = useStyles();
+    const pokemonInfos = usePokemonInfos(pokemonName)
+    if (!pokemonInfos) {
+        return null;
+    }
     const {
-        image,
-        category,
-        title,
-        footer,
-        author,
-    } = props
-    const {classes, theme} = useStyles();
+        id,
+        name,
+        sprites,
+        types,
+    } = pokemonInfos;
 
     return (
         <Card withBorder padding="lg" radius="md" className={classes.card}>
             <Card.Section mb="sm">
-                <Image src={image} alt={title} height={180}/>
+                <Image src={sprites.other?.["official-artwork"].front_default} height={180}/>
             </Card.Section>
 
-            <Badge>{category}</Badge>
+            {types.map((type) => {
+                return (
+                    <Badge key={type.type.name}>
+                        {type.type.name}
+                    </Badge>
+                )
+            })}
 
             <Text fw={700} className={classes.title} mt="xs">
-                {title}
+                {name}
             </Text>
 
             <Group mt="lg">
-                <Avatar src={author.image} radius="sm"/>
+                <Avatar src={sprites.versions["generation-viii"].icons.front_default} radius="sm"/>
                 <div>
-                    <Text fw={500}>{author.name}</Text>
-                    <Text fz="xs" c="dimmed">
-                        {author.description}
-                    </Text>
+                    <Text fw={500}>{id}</Text>
                 </div>
             </Group>
-
-            <Card.Section className={classes.footer}>
-                <Group position="apart">
-                    <Text fz="xs" c="dimmed">
-                        {footer}
-                    </Text>
-                    <Group spacing={0}>
-                        <ActionIcon>
-                            <IconHeart size="1.2rem" color={theme.colors.red[6]} stroke={1.5}/>
-                        </ActionIcon>
-                        <ActionIcon>
-                            <IconBookmark size="1.2rem" color={theme.colors.yellow[6]} stroke={1.5}/>
-                        </ActionIcon>
-                        <ActionIcon>
-                            <IconShare size="1.2rem" color={theme.colors.blue[6]} stroke={1.5}/>
-                        </ActionIcon>
-                    </Group>
-                </Group>
-            </Card.Section>
         </Card>
     )
 }
